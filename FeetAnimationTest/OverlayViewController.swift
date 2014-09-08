@@ -11,16 +11,31 @@ import QuartzCore
 
 class OverlayViewController: UIViewController {
     
+    var timer : NSTimer!
+    var imageView : UIImageView!
+    var points = [CGPoint]()
+    var pointNumber = 0
+    
     @IBOutlet weak var animatingView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let point1 = CGPointMake(100, 200)
+        let point2 = CGPointMake(100, 300)
+        let point3 = CGPointMake(200, 100)
+        self.points.append(point1)
+        self.points.append(point2)
+        self.points.append(point3)
 
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.drawPath()
+//        self.drawPath()
+//        self.addFootImage(CGPointMake(100, 200))
+        self.animatePathBetweenTwoPoints(self.points[0], destination: self.points[1])
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,6 +43,72 @@ class OverlayViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func animatePathBetweenTwoPoints(source: CGPoint, destination: CGPoint) {
+        
+        let leftFoot = UIImage(named: "humanLeftFoot18pxStraight")
+        self.imageView = UIImageView()
+        self.imageView.image = leftFoot
+        self.imageView.frame = CGRectMake(source.x, source.y, 10, 10)
+        self.view.addSubview(self.imageView)
+        
+        self.viewAnimation(destination)
+    }
+    
+    func viewAnimation(destination: CGPoint) {
+        UIView.animateWithDuration(5, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: { () -> Void in
+            self.imageView.frame = CGRect(x: destination.x, y: destination.y, width: self.imageView.frame.width, height: self.imageView.frame.height)
+            self.imageView.hidden = true
+
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "getPoint", userInfo: nil, repeats: true)
+        }) { (success) -> Void in
+            self.timer.invalidate()
+        }
+    }
+    
+    func getPoint() {
+        var currentRect = self.imageView.layer.presentationLayer().frame as CGRect
+        if self.pointNumber % 2 == 0 {
+            self.addLeftFootImage(CGPointMake(currentRect.origin.x, currentRect.origin.y))
+        } else {
+            self.addRightFootImage(CGPointMake(currentRect.origin.x, currentRect.origin.y))
+        }
+        self.pointNumber++
+    }
+    
+    func addLeftFootImage(point: CGPoint) {
+        let leftFoot = UIImage(named: "humanLeftFoot18pxStraight")
+        let imageView = UIImageView(image: leftFoot)
+        
+        imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+
+        self.view.addSubview(imageView)
+
+    }
+    
+    func addRightFootImage(point: CGPoint) {
+        let rightFoot = UIImage(named: "humanRightFoot18pxStraight")
+        
+        let fraction: Double = -140/180
+        // 90/180 is flipped
+        let piMultiplier = M_PI * fraction
+        let rotate = CGAffineTransformMakeRotation(CGFloat(piMultiplier))
+        
+        let imageView = UIImageView(image: rightFoot)
+//        imageView.transform = rotate
+
+        imageView.frame = CGRectMake(point.x + 7, point.y - 2, 10, 10)
+        
+        self.view.addSubview(imageView)
+
+    }
+    
+    
+    
+//    angle / 180.0 * M_PI
+    
+    //MARK: Bezier Path Functions
+    
+    /*
     func drawPath() {
         let point1 = CGPoint(x: 100, y: 100)
         let point2 = CGPoint(x: 140, y: 120)
@@ -40,26 +121,31 @@ class OverlayViewController: UIViewController {
         
         var track = CAShapeLayer()
         track.path = trackPath.CGPath
-        track.strokeColor = UIColor.clearColor().CGColor
+        track.strokeColor = UIColor.redColor().CGColor
+        track.lineDashPattern = [3, 2]
         track.fillColor = UIColor.clearColor().CGColor
         track.lineWidth = 3.0
+        track.lineJoin = kCALineJoinRound
         self.view.layer.addSublayer(track)
         
         var footImage = UIImage(named: "humanLeftFoot18px")
-        var newFootImage = UIImage(CGImage: footImage.CGImage, scale: 1, orientation: UIImageOrientation.DownMirrored)
-
-        var foot = CALayer()
-        foot.bounds = CGRectMake(0, 0, 8, 8)
-        foot.position = CGPointMake(20, 20)
-        foot.contents = newFootImage.CGImage
-        self.view.layer.addSublayer(foot)
+        var newFootImage = UIImage(CGImage: footImage.CGImage, scale: 1, orientation: UIImageOrientation.Right)
+        
+        var rightFootImage = UIImage(named: "humanRightFoot18px")
+        var newRightFootImage = UIImage(CGImage: rightFootImage.CGImage, scale: 1, orientation: UIImageOrientation.LeftMirrored)
+        
+        var leftFoot = CALayer()
+        leftFoot.bounds = CGRectMake(0, 0, 8, 8)
+        //        leftFoot.position = CGPointMake(20, 20)
+        leftFoot.contents = newFootImage.CGImage
+        self.view.layer.addSublayer(leftFoot)
         
         var animation = CAKeyframeAnimation(keyPath: "position")
         animation.path = trackPath.CGPath
         animation.duration = 10
         animation.repeatCount = 100
         animation.rotationMode = kCAAnimationRotateAuto
-        foot.addAnimation(animation, forKey: "walk")
+        leftFoot.addAnimation(animation, forKey: "walk")
         
     }
     
@@ -78,12 +164,16 @@ class OverlayViewController: UIViewController {
             } else {
                 bezierPath.addCurveToPoint(points[i], controlPoint1: CGPointMake(points[i].x, points[i].y - offset), controlPoint2: CGPointMake(points[i].x, points[i].y - offset))
             }
-
-
+            
+            
         }
         
         return bezierPath
     }
+    
+    */
+    
+    //void MyCGPathApplierFunc (void *info, const CGPathElement *element);
     
 
     /*
