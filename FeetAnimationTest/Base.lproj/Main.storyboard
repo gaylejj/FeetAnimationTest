@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6206.8" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7026.1"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FeetAnimationTest" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hbY-HU-vx9">
+                                <rect key="frame" x="0.0" y="60" width="600" height="440"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LPv-Ph-1FJ">
+                                <rect key="frame" x="274" y="545" width="52" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="52" id="Dli-8f-BcB"/>
+                                    <constraint firstAttribute="height" constant="30" id="dOs-DH-Z6W"/>
+                                </constraints>
+                                <state key="normal" title="Overlay">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="showOverlayButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LBc-6C-wzI"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hbY-HU-vx9" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="top" constant="50" id="MB0-aY-fol"/>
+                            <constraint firstAttribute="trailing" secondItem="hbY-HU-vx9" secondAttribute="trailing" id="Rnu-ja-1aX"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="LPv-Ph-1FJ" secondAttribute="bottom" constant="25" id="W8W-BP-x1E"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="hbY-HU-vx9" secondAttribute="bottom" constant="100" id="bLr-pj-AQx"/>
+                            <constraint firstItem="hbY-HU-vx9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="t0T-Vd-SrN"/>
+                            <constraint firstItem="hbY-HU-vx9" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="60" id="vnc-fe-vFm"/>
+                            <constraint firstAttribute="centerX" secondItem="LPv-Ph-1FJ" secondAttribute="centerX" id="x2H-F1-NDQ"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="MB0-aY-fol"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="mapview" destination="hbY-HU-vx9" id="eCJ-ii-UkM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!--Overlay View Controller-->
+        <scene sceneID="GT5-IE-qGG">
+            <objects>
+                <viewController storyboardIdentifier="overlayVC" id="2ny-Cm-JjA" customClass="OverlayViewController" customModule="FeetAnimationTest" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zYv-x7-hIp"/>
+                        <viewControllerLayoutGuide type="bottom" id="vfS-OE-Xdl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hX3-xU-UcC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PLf-9H-ueh">
+                                <rect key="frame" x="0.0" y="60" width="600" height="440"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="PLf-9H-ueh" firstAttribute="top" secondItem="hX3-xU-UcC" secondAttribute="top" constant="60" id="10c-2b-z7V"/>
+                            <constraint firstItem="PLf-9H-ueh" firstAttribute="top" secondItem="zYv-x7-hIp" secondAttribute="bottom" constant="60" id="2Rv-qB-gGc"/>
+                            <constraint firstAttribute="trailing" secondItem="PLf-9H-ueh" secondAttribute="trailing" id="Xxd-Gg-R0T"/>
+                            <constraint firstItem="PLf-9H-ueh" firstAttribute="leading" secondItem="hX3-xU-UcC" secondAttribute="leading" id="kPF-op-wqI"/>
+                            <constraint firstItem="vfS-OE-Xdl" firstAttribute="top" secondItem="PLf-9H-ueh" secondAttribute="bottom" constant="100" id="xub-bS-cGx"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="2Rv-qB-gGc"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="animatingView" destination="PLf-9H-ueh" id="qaU-4Z-LyM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jLy-Yb-jET" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="938" y="380"/>
+        </scene>
+    </scenes>
+</document>
