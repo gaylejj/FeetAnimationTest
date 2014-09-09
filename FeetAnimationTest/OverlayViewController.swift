@@ -20,7 +20,8 @@ class OverlayViewController: UIViewController {
     var source: CGPoint!
     var destination: CGPoint!
     var safeco : CGPoint!
-    var rotation : CGAffineTransform?
+    var rotation : CGAffineTransform!
+    var quadrant : Int!
     
     
     @IBOutlet weak var animatingView: UIView!
@@ -71,7 +72,9 @@ class OverlayViewController: UIViewController {
         self.imageViewArray.append(self.imageView)
         self.view.addSubview(self.imageView)
         
-        self.rotation = self.angleBetweenTwoPoints(source, point2: destination)
+        var tuple = self.angleBetweenTwoPoints(source, point2: destination)
+        self.rotation = tuple.transform
+        self.quadrant = tuple.quadrant
         
         self.viewAnimation(destination)
     }
@@ -109,7 +112,20 @@ class OverlayViewController: UIViewController {
     func addLeftFootImage(point: CGPoint) {
         let leftFoot = UIImage(named: "humanLeftFoot18pxStraight")
         let imageView = UIImageView(image: leftFoot)
-        imageView.frame = CGRectMake(point.x, point.y , 10, 10)
+//        imageView.frame = CGRectMake(point.x, point.y , 10, 10)
+        switch self.quadrant {
+        case 1:
+            imageView.frame = CGRectMake(point.x + 5, point.y - 5, 10, 10)
+        case 2:
+            imageView.frame = CGRectMake(point.x - 3, point.y - 5, 10, 10)
+            //TODO: Values for 3/4
+        case 3:
+            imageView.frame = CGRectMake(point.x - 3, point.y - 3, 10, 10)
+        case 4:
+            imageView.frame = CGRectMake(point.x + 3, point.y - 3, 10, 10)
+        default:
+            imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+        }
         imageView.transform = self.rotation!
         self.imageViewArray.append(imageView)
 
@@ -119,15 +135,32 @@ class OverlayViewController: UIViewController {
     func addRightFootImage(point: CGPoint) {
         let rightFoot = UIImage(named: "humanRightFoot18pxStraight")
         let imageView = UIImageView(image: rightFoot)
-        imageView.frame = CGRectMake(point.x + 3, point.y, 10, 10)
+//        imageView.frame = CGRectMake(point.x + 3, point.y, 10, 10)
+        switch self.quadrant {
+        case 1:
+            imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+        case 2:
+            imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+            //TODO: Values for 3/4
+        case 3:
+            imageView.frame = CGRectMake(point.x - 3, point.y - 3, 10, 10)
+        case 4:
+            imageView.frame = CGRectMake(point.x + 3, point.y - 3, 10, 10)
+        default:
+            imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+        }
+
         imageView.transform = self.rotation!
+
+        
+        
 
         self.imageViewArray.append(imageView)
         
         self.view.addSubview(imageView)
     }
     
-    func angleBetweenTwoPoints(point1: CGPoint, point2: CGPoint) -> CGAffineTransform {
+    func angleBetweenTwoPoints(point1: CGPoint, point2: CGPoint) -> (transform: CGAffineTransform, quadrant: Int)   {
         let piMultiplier = 180 / M_PI
 //        var angle : CGFloat = abs(atan2(0 - point1.y, 0 - point1.x))
         var lowerYAngle : CGFloat = abs(atan2(point2.y - point1.y, point2.x - point1.x))
@@ -146,24 +179,26 @@ class OverlayViewController: UIViewController {
             var angle_X_Y = atan2(dx, dy)
             var degreeAngle_X_Y = angle_X_Y * CGFloat(piMultiplier)
             rotationTransform = CGAffineTransformMakeRotation(degreeAngle_X_Y)
+            return (rotationTransform, 4)
             
         } else if point1.x < point2.x && point1.y < point2.y {
             var angleXY = atan2(-dx, -dy)
             var degreeAngleXY = angleXY * CGFloat(piMultiplier)
             rotationTransform = CGAffineTransformMakeRotation(degreeAngleXY)
+            return (rotationTransform, 1)
             
         } else if point1.x > point2.x && point1.y < point2.y {
             var angle_XY = atan2(dx, -dy)
             var degreeAngle_XY = angle_XY * CGFloat(piMultiplier)
             rotationTransform = CGAffineTransformMakeRotation(degreeAngle_XY)
+            return (rotationTransform, 3)
             
         } else {
             var angleX_Y = atan2(-dx, dy)
             var degreeAngleX_Y = angleX_Y * CGFloat(piMultiplier)
             rotationTransform = CGAffineTransformMakeRotation(degreeAngleX_Y)
+            return (rotationTransform, 2)
         }
-
-        return rotationTransform
     }
     
 //    let fraction: Double = -140/180
