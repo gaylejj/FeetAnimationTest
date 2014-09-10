@@ -20,26 +20,19 @@ class OverlayViewController: UIViewController {
     var source: CGPoint!
     var destination: CGPoint!
     var safeco : CGPoint!
-    var quadrant3 : CGPoint!
-    var quadrant4 : CGPoint!
+//    var quadrant3 : CGPoint!
+//    var quadrant4 : CGPoint!
     
     var rotation : CGAffineTransform!
     var quadrant : Int!
+    
+    var numberOfPoints = 0
     
     
     @IBOutlet weak var animatingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        let point1 = CGPointMake(100, 300)
-//        let point2 = CGPointMake(100, 200)
-//        let point3 = CGPointMake(200, 100)
-//        self.points.append(point1)
-//        self.points.append(point2)
-//        self.points.append(point3)
-        
-
 
         // Do any additional setup after loading the view.
     }
@@ -48,28 +41,11 @@ class OverlayViewController: UIViewController {
         super.viewDidAppear(animated)
         self.points.append(self.source)
         self.points.append(self.destination)
-
-//        self.animatePathBetweenTwoPoints(self.points[0], destination: self.points[1])
-//        delay(5, closure: { () -> () in
-//            self.animatePathBetweenTwoPoints(self.source, destination: self.safeco)
-//        })
-//        delay(10, closure: { () -> () in
-            self.animatePathBetweenTwoPoints(self.source, destination: self.quadrant3)
-//        })
-        delay(5, closure: { () -> () in
-            self.animatePathBetweenTwoPoints(self.source, destination: self.quadrant4)
-        })
-
+        self.points.append(self.safeco)
+//        self.points.append(self.quadrant4)
+//        self.points.append(self.quadrant3)
         
-    }
-    
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+        self.animatePathBetweenTwoPoints(self.points[0], destination: self.points[1])
     }
 
     override func didReceiveMemoryWarning() {
@@ -100,7 +76,13 @@ class OverlayViewController: UIViewController {
             self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "getPoint", userInfo: nil, repeats: true)
         }) { (success) -> Void in
             self.timer.invalidate()
-//            self.animatePathBetweenTwoPoints(self.source, destination: self.safeco)
+            self.numberOfPoints++
+            if self.numberOfPoints < self.points.count - 1 {
+                var point = self.points[self.numberOfPoints]
+                var pointPlusOne = self.points[self.numberOfPoints + 1]
+                self.animatePathBetweenTwoPoints(point, destination: pointPlusOne)
+
+            }
 
         }
     }
@@ -141,6 +123,8 @@ class OverlayViewController: UIViewController {
             imageView.frame = CGRectMake(point.x, point.y, 10, 10)
         }
         imageView.transform = self.rotation!
+        
+        
         self.imageViewArray.append(imageView)
 
         self.view.addSubview(imageView)
@@ -167,9 +151,6 @@ class OverlayViewController: UIViewController {
 
         imageView.transform = self.rotation!
 
-        
-        
-
         self.imageViewArray.append(imageView)
         
         self.view.addSubview(imageView)
@@ -177,13 +158,6 @@ class OverlayViewController: UIViewController {
     
     func angleBetweenTwoPoints(point1: CGPoint, point2: CGPoint) -> (transform: CGAffineTransform, quadrant: Int)   {
         let piMultiplier = 180 / M_PI
-//        var angle : CGFloat = abs(atan2(0 - point1.y, 0 - point1.x))
-        var lowerYAngle : CGFloat = abs(atan2(point2.y - point1.y, point2.x - point1.x))
-        var higherYAngle : CGFloat = atan2(point2.x - point1.x, point2.y - point1.y)
-//        var degreeAngle = angle * CGFloat(piMultiplier)
-        var lowerYDegreeAngle = lowerYAngle * CGFloat(piMultiplier)
-        var higherYDegreeAngle = higherYAngle * CGFloat(piMultiplier)
-        
         
         var dx = point1.x - point2.x
         var dy = point1.y - point2.y
@@ -193,7 +167,7 @@ class OverlayViewController: UIViewController {
         if point1.x > point2.x && point1.y > point2.y {
             var angle_X_Y = atan2(dx, dy)
             var degreeAngle_X_Y = angle_X_Y * CGFloat(piMultiplier)
-            rotationTransform = CGAffineTransformMakeRotation(degreeAngle_X_Y)
+            rotationTransform = CGAffineTransformMakeRotation(-degreeAngle_X_Y)
             return (rotationTransform, 4)
             
         } else if point1.x < point2.x && point1.y < point2.y {
@@ -205,7 +179,7 @@ class OverlayViewController: UIViewController {
         } else if point1.x > point2.x && point1.y < point2.y {
             var angle_XY = atan2(dx, -dy)
             var degreeAngle_XY = angle_XY * CGFloat(piMultiplier)
-            rotationTransform = CGAffineTransformMakeRotation(degreeAngle_XY)
+            rotationTransform = CGAffineTransformMakeRotation(-degreeAngle_XY)
             return (rotationTransform, 3)
             
         } else {
@@ -215,6 +189,16 @@ class OverlayViewController: UIViewController {
             return (rotationTransform, 2)
         }
     }
+    
+    
+//    func delay(delay:Double, closure:()->()) {
+//        dispatch_after(
+//            dispatch_time(
+//                DISPATCH_TIME_NOW,
+//                Int64(delay * Double(NSEC_PER_SEC))
+//            ),
+//            dispatch_get_main_queue(), closure)
+//    }
     
 //    let fraction: Double = -140/180
     // 90/180 is flipped
