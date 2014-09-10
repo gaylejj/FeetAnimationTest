@@ -56,14 +56,20 @@ class ViewController: UIViewController, MKMapViewDelegate {
         var sourcePoint = CLLocationCoordinate2D(latitude: 47.620506, longitude: -122.349277)
         var destPoint = CLLocationCoordinate2D(latitude: 47.6235481, longitude: -122.336212)
         var safecoPoint = CLLocationCoordinate2D(latitude: 47.591351, longitude: -122.332271)
+        var quadrant3 = CLLocationCoordinate2D(latitude: 47.650000, longitude: -122.37000)
+        var quadrant4 = CLLocationCoordinate2D(latitude: 47.600000, longitude: -122.37000)
         
         var convertedSource = self.convertCLLocationCoordinate(sourcePoint)
         var convertedDestination = self.convertCLLocationCoordinate(destPoint)
         var convertedSafeco = self.convertCLLocationCoordinate(safecoPoint)
+        var convertedQuadrant3 = self.convertCLLocationCoordinate(quadrant3)
+        var convertedQuadrant4 = self.convertCLLocationCoordinate(quadrant4)
         
         self.overlayVC.source = convertedSource
         self.overlayVC.destination = convertedDestination
         self.overlayVC.safeco = convertedSafeco
+        self.overlayVC.quadrant3 = convertedQuadrant3
+        self.overlayVC.quadrant4 = convertedQuadrant4
         self.view.addSubview(self.overlayVC.view)
 
     }

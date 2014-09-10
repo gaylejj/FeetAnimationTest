@@ -20,6 +20,9 @@ class OverlayViewController: UIViewController {
     var source: CGPoint!
     var destination: CGPoint!
     var safeco : CGPoint!
+    var quadrant3 : CGPoint!
+    var quadrant4 : CGPoint!
+    
     var rotation : CGAffineTransform!
     var quadrant : Int!
     
@@ -46,7 +49,17 @@ class OverlayViewController: UIViewController {
         self.points.append(self.source)
         self.points.append(self.destination)
 
-        self.animatePathBetweenTwoPoints(self.points[0], destination: self.points[1])
+//        self.animatePathBetweenTwoPoints(self.points[0], destination: self.points[1])
+//        delay(5, closure: { () -> () in
+//            self.animatePathBetweenTwoPoints(self.source, destination: self.safeco)
+//        })
+//        delay(10, closure: { () -> () in
+            self.animatePathBetweenTwoPoints(self.source, destination: self.quadrant3)
+//        })
+        delay(5, closure: { () -> () in
+            self.animatePathBetweenTwoPoints(self.source, destination: self.quadrant4)
+        })
+
         
     }
     
@@ -80,14 +93,14 @@ class OverlayViewController: UIViewController {
     }
     
     func viewAnimation(destination: CGPoint) {
-        UIView.animateWithDuration(10, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: { () -> Void in
+        UIView.animateWithDuration(5, delay: 0, options: UIViewAnimationOptions.CurveLinear, animations: { () -> Void in
             self.imageView.frame = CGRect(x: destination.x, y: destination.y - 60, width: self.imageView.frame.width, height: self.imageView.frame.height)
             self.imageView.hidden = true
 
             self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "getPoint", userInfo: nil, repeats: true)
         }) { (success) -> Void in
             self.timer.invalidate()
-            self.animatePathBetweenTwoPoints(self.source, destination: self.safeco)
+//            self.animatePathBetweenTwoPoints(self.source, destination: self.safeco)
 
         }
     }
@@ -98,7 +111,7 @@ class OverlayViewController: UIViewController {
             let distanceBetweenX = abs(currentRect.origin.x - lastImageView.frame.origin.x)
             let distanceBetweenY = abs(currentRect.origin.y - lastImageView.frame.origin.y)
             
-            if distanceBetweenX > 5 || distanceBetweenY > 5 {
+            if distanceBetweenX > 8 || distanceBetweenY > 8 {
                 if self.pointNumber % 2 == 0 {
                     self.addLeftFootImage(CGPointMake(currentRect.origin.x, currentRect.origin.y))
                 } else {
@@ -118,11 +131,12 @@ class OverlayViewController: UIViewController {
             imageView.frame = CGRectMake(point.x + 5, point.y - 5, 10, 10)
         case 2:
             imageView.frame = CGRectMake(point.x - 3, point.y - 5, 10, 10)
-            //TODO: Values for 3/4
         case 3:
-            imageView.frame = CGRectMake(point.x - 3, point.y - 3, 10, 10)
+//            imageView.frame = CGRectMake(point.x - 3, point.y - 3, 10, 10)
+            imageView.frame = CGRectMake(point.x + 3, point.y + 7, 10, 10)
         case 4:
-            imageView.frame = CGRectMake(point.x + 3, point.y - 3, 10, 10)
+//            imageView.frame = CGRectMake(point.x + 10, point.y + 3, 10, 10)
+            imageView.frame = CGRectMake(point.x - 3, point.y + 3, 10, 10)
         default:
             imageView.frame = CGRectMake(point.x, point.y, 10, 10)
         }
@@ -138,14 +152,15 @@ class OverlayViewController: UIViewController {
 //        imageView.frame = CGRectMake(point.x + 3, point.y, 10, 10)
         switch self.quadrant {
         case 1:
-            imageView.frame = CGRectMake(point.x, point.y, 10, 10)
+            imageView.frame = CGRectMake(point.x + 3, point.y + 3, 10, 10)
         case 2:
             imageView.frame = CGRectMake(point.x, point.y, 10, 10)
-            //TODO: Values for 3/4
         case 3:
+//            imageView.frame = CGRectMake(point.x + 6, point.y + 6, 10, 10)
             imageView.frame = CGRectMake(point.x - 3, point.y - 3, 10, 10)
         case 4:
-            imageView.frame = CGRectMake(point.x + 3, point.y - 3, 10, 10)
+//            imageView.frame = CGRectMake(point.x - 10, point.y - 3, 10, 10)
+            imageView.frame = CGRectMake(point.x + 3, point.y - 3 , 10, 10)
         default:
             imageView.frame = CGRectMake(point.x, point.y, 10, 10)
         }
