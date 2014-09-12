@@ -49,6 +49,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
     @IBAction func showOverlayButton(sender: AnyObject) {
         
         self.overlayVC.view.frame = CGRect(x: self.mapview.frame.origin.x, y: self.mapview.frame.origin.y, width: self.mapview.frame.width, height: self.mapview.frame.height)
+        self.overlayVC.view.bounds = CGRect(x: self.mapview.frame.origin.x, y: self.mapview.frame.origin.y, width: self.mapview.frame.width, height: self.mapview.frame.height)
+        self.overlayVC.view.clipsToBounds = true
         self.overlayVC.view.backgroundColor = UIColor.clearColor()
         
 //        var sourcePoint = CLLocationCoordinate2D(latitude: nf.numberFromString(self.destinationLat.text)!, longitude: nf.numberFromString(self.sourceLong.text)!)
